@@ -1,45 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>文件路径选择器</title>
-  <style>
-    .file-path {
-      width: 300px;
-      height: 30px;
-      margin-bottom: 10px;
-    }
-  </style>
+    <title>Select XLSX File</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#file-input').change(function () {
+                var file = this.files[0];
+                var formData = new FormData();
+                formData.append('file', file);
+
+                $.ajax({
+                    url: '/upload',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        alert('File uploaded successfully!');
+                        $('#header-output').text(data);
+                    },
+                    error: function () {
+                        alert('Error occurred while uploading the file.');
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
-  <input type="file" id="fileInput" style="display: none;">
-  
-  <button onclick="selectFile()">选择文件</button>
-  <br>
-  <input type="text" id="filePathDisplay" class="file-path" readonly>
-  <br>
-  <button onclick="extractExtension()">提取扩展名</button>
-
-  <script>
-    function selectFile() {
-      const fileInput = document.getElementById('fileInput');
-      fileInput.click();
-      fileInput.addEventListener('change', function() {
-        const filePathDisplay = document.getElementById('filePathDisplay');
-        filePathDisplay.value = this.value;
-      });
-    }
-
-    function extractExtension() {
-      const filePathDisplay = document.getElementById('filePathDisplay');
-      const filePath = filePathDisplay.value;
-      const extensionIndex = filePath.lastIndexOf('.');
-      if (extensionIndex !== -1) {
-        const extension = filePath.substr(extensionIndex + 1);
-        alert('文件扩展名为：' + extension);
-      } else {
-        alert('无法提取文件扩展名');
-      }
-    }
-  </script>
+    <h1>Select XLSX File</h1>
+    <input type="file" id="file-input">
+    <br>
+    <br>
+    <button id="detect-header">Detect Header</button>
+    <div id="header-output"></div>
 </body>
 </html>
