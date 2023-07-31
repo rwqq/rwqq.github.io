@@ -1,3 +1,1 @@
-# rwqq.github.io
-
-first code
+hello wuqq coding
